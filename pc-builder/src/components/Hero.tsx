@@ -23,7 +23,7 @@ export const Hero = ({ onStartBuild, onViewExamples }: HeroProps) => {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          Build Your Perfect PC
+          Build Your Xcomputer with PineApple
         </h1>
         
         <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-150">
