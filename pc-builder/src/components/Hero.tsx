@@ -3,9 +3,10 @@ import { Cpu, Zap } from "lucide-react";
 
 interface HeroProps {
   onStartBuild: () => void;
+  onViewExamples: () => void;
 }
 
-export const Hero = ({ onStartBuild }: HeroProps) => {
+export const Hero = ({ onStartBuild, onViewExamples }: HeroProps) => {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Animated background gradient */}
@@ -22,7 +23,7 @@ export const Hero = ({ onStartBuild }: HeroProps) => {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          Build Your Xcomputer with Pine Apple
+          Build Your Perfect PC
         </h1>
         
         <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-150">
@@ -43,6 +44,7 @@ export const Hero = ({ onStartBuild }: HeroProps) => {
           <Button 
             size="lg" 
             variant="outline"
+            onClick={onViewExamples}
             className="border-primary/30 hover:border-primary hover:bg-primary/10 text-lg px-8 py-6"
           >
             View Example Builds

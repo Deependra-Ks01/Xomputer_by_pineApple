@@ -5,12 +5,14 @@ import { Separator } from "@/components/ui/separator";
 import { PCBuild } from "@/types/pc-components";
 import { calculateTotalCost, calculateTotalPowerDraw, checkCompatibility } from "@/utils/compatibility";
 import { DollarSign, Zap, AlertTriangle, CheckCircle, Download, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface BuildSummaryProps {
   build: PCBuild;
 }
 
 export const BuildSummary = ({ build }: BuildSummaryProps) => {
+  const { toast } = useToast();
   const totalCost = calculateTotalCost(build);
   const totalPowerDraw = calculateTotalPowerDraw(build);
   const issues = checkCompatibility(build);
@@ -18,6 +20,49 @@ export const BuildSummary = ({ build }: BuildSummaryProps) => {
   const warnings = issues.filter(issue => issue.type === "warning");
 
   const isComplete = build.cpu && build.gpu && build.motherboard && build.ram && build.storage && build.psu && build.case;
+
+  const handleExport = () => {
+    const buildData = {
+      ...build,
+      totalCost,
+      totalPowerDraw,
+      exportedAt: new Date().toISOString(),
+    };
+
+    const dataStr = JSON.stringify(buildData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `pc-build-${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Build Exported",
+      description: "Your PC build has been downloaded as JSON",
+    });
+  };
+
+  const handleShare = async () => {
+    const buildUrl = `${window.location.origin}?build=${encodeURIComponent(btoa(JSON.stringify(build)))}`;
+    
+    try {
+      await navigator.clipboard.writeText(buildUrl);
+      toast({
+        title: "Link Copied!",
+        description: "Share this link to show your build to others",
+      });
+    } catch (err) {
+      toast({
+        title: "Share Build",
+        description: buildUrl,
+        variant: "default",
+      });
+    }
+  };
 
   return (
     <Card className="sticky top-6 p-6 bg-gradient-tech border-primary/20">
@@ -96,17 +141,19 @@ export const BuildSummary = ({ build }: BuildSummaryProps) => {
       {/* Actions */}
       <div className="space-y-2">
         <Button 
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow"
+          className="w-full" 
           disabled={!isComplete || errors.length > 0}
+          onClick={handleExport}
         >
           <Download className="w-4 h-4 mr-2" />
           Export Build
         </Button>
         
         <Button 
-          variant="outline" 
-          className="w-full border-primary/30 hover:border-primary hover:bg-primary/10"
-          disabled={!isComplete}
+          variant="outline"
+          className="w-full"
+          disabled={!isComplete || errors.length > 0}
+          onClick={handleShare}
         >
           <Share2 className="w-4 h-4 mr-2" />
           Share Build
