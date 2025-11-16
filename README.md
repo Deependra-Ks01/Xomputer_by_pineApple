@@ -1,4 +1,4 @@
-# PC Builder - Interactive 3D Computer Building Application
+# Xomputer by PineApple - Interactive 3D Computer Building Application
 
 An interactive web application that guides users through building a custom PC with real-time 3D visualization, compatibility checking, and budget management. Built with React, TypeScript, Three.js, and Redux Toolkit.
 
